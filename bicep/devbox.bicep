@@ -51,7 +51,7 @@ resource projectPool 'Microsoft.DevCenter/projects/pools@2022-11-11-preview' = {
   
   
   resource scheduleStop 'schedules' = {
-    name: 'Daily-Auto-Stop'
+    name: 'default'
     properties: {
       frequency: 'Daily'
       state: 'Enabled'
