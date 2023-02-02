@@ -12,22 +12,22 @@ resource project 'Microsoft.DevCenter/projects@2022-11-11-preview' existing = {
 }
 
 module win11plain 'devboxdef.bicep' = {
-  name: '${deployment().name}-DevboxDef'
+  name: '${deployment().name}-DevboxDef-win11'
   params: {
     devcenterName: dc.name
     location: location
   }
 }
 
-// module vs2022 'devboxdef.bicep' = {
-//   name: '${deployment().name}-DevboxDef'
-//   params: {
-//     devcenterName: devcenterName
-//     location: location
-//     image: 'vs2022win11m365'
-//     storage: 'ssd_256gb'
-//   }
-// }
+module vs2022 'devboxdef.bicep' = {
+  name: '${deployment().name}-DevboxDef-vs2022'
+  params: {
+    devcenterName: devcenterName
+    location: location
+    image: 'vs2022win11m365'
+    storage: 'ssd_256gb'
+  }
+}
 
 module networking 'devboxNetworking.bicep' = {
   name: '${deployment().name}-Networking'
@@ -47,5 +47,17 @@ resource projectPool 'Microsoft.DevCenter/projects/pools@2022-11-11-preview' = {
     licenseType: 'Windows_Client'
     localAdministrator: 'Enabled'
     networkConnectionName: networking.outputs.attachedNetworkName
+  }
+  
+  
+  resource scheduleStop 'schedules' = {
+    name: 'Daily-Auto-Stop'
+    properties: {
+      frequency: 'Daily'
+      state: 'Enabled'
+      type: 'StopDevBox'
+      timeZone: 'America/Los_Angeles'
+      time: '18:00'
+    }
   }
 }

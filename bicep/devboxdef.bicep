@@ -1,13 +1,12 @@
 param nameseed string = 'dbox'
+param definitionName string = '${nameseed}-${image}-${storage}'
 param location string = resourceGroup().location
 param devcenterName string
 
 @allowed(['win11', 'vs2022win11m365'])
 param image string = 'win11'
-//param imageId string = '/subscriptions/18b4ffd8-31a1-4926-88f3-9dee757fc49c/resourceGroups/prod-devbox/providers/Microsoft.DevCenter/devcenters/dc-dbox/galleries/default/images/microsoftvisualstudio_visualstudioplustools_vs-2022-pro-general-win11-m365-gen2'
 
 var sku = skuMap.vm8core32memory
-
 var skuMap = {
   vm8core32memory: 'general_a_8c32gb_v1'
 }
@@ -36,7 +35,7 @@ resource galleryimage 'Microsoft.DevCenter/devcenters/galleries/images@2022-11-1
 output imageGalleryId string = galleryimage.id
 
 resource devboxdef 'Microsoft.DevCenter/devcenters/devboxdefinitions@2022-11-11-preview' = {
-  name: 'VS2022-Win11-M365'
+  name: definitionName
   parent: dc
   location: location
   properties: {

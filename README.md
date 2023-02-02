@@ -9,7 +9,10 @@ This guide helps accelerate onboarding to the two Azure Services that Azure Devc
 
 ## Prerequisites
 
-You'll need an Azure AD tenant which is licensed at least at P1.
+Devbox has several license [prerequisites](https://learn.microsoft.com/azure/dev-box/quickstart-configure-dev-box-service?tabs=AzureADJoin#prerequisites). Namely Windows, Intune and AzureAD.
+
+Your Azure AD tenant must be enabled for [auto-enrolment](https://learn.microsoft.com/mem/intune/enrollment/quickstart-setup-auto-enrollment) of new devices (intune).
+
 It doesn't work with invited (B2B) identities, so users will need to be directly associated with the tenant.
 
 ## Deploy the common infrastructure
