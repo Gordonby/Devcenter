@@ -51,7 +51,7 @@ resource projectPool 'Microsoft.DevCenter/projects/pools@2022-11-11-preview' = {
   
   
   resource scheduleStop 'schedules' = {
-    name: 'default'
+    name: 'default' //Currently we only support one schedule for a pool and the schedule name can only be 'default'"
     properties: {
       frequency: 'Daily'
       state: 'Enabled'
