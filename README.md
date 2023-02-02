@@ -1,9 +1,9 @@
 # Azure Devcenter Quickstart
 
-This guide helps accelerate onboarding to the two Azure Services that Azure Devcenter enables;
+This guide helps accelerate onboarding to the two Azure Services that Azure Devcenter enables by providing Bicep Infrastructure as Code to quickly deploy and configure the services.
 
-1. Azure Devbox - Give your developers access to managed Virtual Machines
-1. Azure Deployment Environments - Provide curated Azure infra templates to your developers to deploy their code into
+1. Azure Devbox - Give your developers access to managed Windows Virtual Machines to code on
+1. Azure Deployment Environments - Provide curated Azure infra templates to your developers to *deploy* their code into
 
 ## Devcenter concepts
 
@@ -17,7 +17,7 @@ It doesn't work with invited (B2B) identities, so users will need to be directly
 
 ## Deploy the common infrastructure
 
-Both Dev box and Deployment Environments use several common Devcenter components to drive their experiences. Central to these is the concept of `Projects`. A project is what binds the developer access to developer workstations through Devbox and the relevant templates from ADE.
+Both Devbox and Deployment Environments use several common Devcenter components to drive their experiences. Central to these is the concept of `Projects`. A project is what binds the developer access to developer workstations through Devbox and the relevant templates from ADE.
 
 ```bash
 az deployment group create -g innerloop -f bicep/common.bicep -p devboxProjectUser=$(az ad signed-in-user show --query id -o tsv)
