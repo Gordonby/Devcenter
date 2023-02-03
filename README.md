@@ -7,7 +7,7 @@ This guide helps accelerate onboarding to the two Azure Services that Azure Devc
 
 ## Devcenter concepts
 
-A typical Devcenter configuration depends on & integrates a lot of Azure Services. This can be a little confusing, but also takes time to correctly configure a working environment. The IaC in this repository provides the consistency of creation and configuration of these components.
+A typical Devcenter configuration depends on & integrates a lot of Azure Services. This can be a little confusing, but also takes time to correctly configure a working environment. The IaC in this repository provides the consistency of creation and configuration of all these components via 2-3 az cli commands.
 
 ```mermaid
 erDiagram
