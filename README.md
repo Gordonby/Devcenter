@@ -7,6 +7,30 @@ This guide helps accelerate onboarding to the two Azure Services that Azure Devc
 
 ## Devcenter concepts
 
+A typical Devcenter configuration depends on & integrates a lot of Azure Services. This can be a little confusing, but also takes time to correctly configure a working environment. The IaC in this repository provides the consistency of creation and configuration of these components.
+
+```mermaid
+erDiagram
+
+    DEVCENTER }|..|{ PROJECT : has
+    DEVCENTER }|..|{ AzureMonitor : "logs to"
+    PROJECT }|..|{ Azure-AdRbac : "authorises developers with"
+    
+    %% Networking components
+    VNET ||..|{ Devbox-Pool : hosts
+    Net-Connection ||..|{ VNET : exposes
+    DEVCENTER ||..|| Net-Connection : "leverages for Devbox pool"
+
+    %% Devbox components
+    PROJECT }|..|{ Devbox-Pool : "provides dev vms from"
+    Devbox-Pool ||--|| Schedule : "shutdown"
+    Devbox-Pool }|..|{ Devbox-Definition : "gets compute/image spec"
+    Image-Gallery }|..|{ Devbox-Definition : "provides images"
+
+    %% Styling
+    %%style DEVCENTER fill :#f9f
+```
+
 ## Prerequisites
 
 Devbox has several license [prerequisites](https://learn.microsoft.com/azure/dev-box/quickstart-configure-dev-box-service?tabs=AzureADJoin#prerequisites). Namely Windows, Intune and AzureAD.
