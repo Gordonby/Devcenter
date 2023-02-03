@@ -46,6 +46,8 @@ Your Azure AD tenant must be enabled for [auto-enrolment](https://learn.microsof
 
 It doesn't work with invited (B2B) identities, so users will need to be directly associated with the tenant.
 
+To complete the steps in this guide, you will need the Azure CLI and the GitHub CLI.
+
 ## Deploy the common infrastructure
 
 ```bash
@@ -75,11 +77,18 @@ Your Developers will access Devbox resources through a dedicated portal; [https:
 ### Catalog repo
 
 ADE requires a catalog in the form of a Git repository. The catalog contains IaC templates used to create environments.
-
 To quickly get started with a sample catalog, use these commands to fork the [ADE](https://github.com/Azure/deployment-environments) repo.
 
 ```bash
-gh repo 
+gh repo fork Azure/deployment-environments
 ```
 
-> After creation of the repository, [create a PAT token](https://learn.microsoft.com/azure/deployment-environments/how-to-configure-catalog#create-a-personal-access-token-in-github) to allow ADE to gain access to these resources
+> After creation of the repository, [create a PAT token](https://learn.microsoft.com/azure/deployment-environments/how-to-configure-catalog#create-a-personal-access-token-in-github) to allow ADE to gain access to these resources.
+
+### ADE Infrastructure
+
+Lets create the infrastructure components for ADE
+
+```bash
+ az deployment group create -g innerloop -f bicep/devbox.bicep -p devcenterName=dc-dbox
+```
