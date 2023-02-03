@@ -2,8 +2,8 @@
 
 This guide helps accelerate onboarding to the two Azure Services that Azure Devcenter enables by providing Bicep Infrastructure as Code to quickly deploy and configure the services.
 
-1. Azure Devbox - Give your developers access to managed Windows Virtual Machines to code on
-1. Azure Deployment Environments - Provide curated Azure infra templates to your developers to *deploy* their code into
+1. [Azure Devbox](https://learn.microsoft.com/azure/dev-box/overview-what-is-microsoft-dev-box) - Give your developers access to managed Windows Virtual Machines to code on
+1. [Azure Deployment Environments](https://azure.microsoft.com/products/deployment-environments) - Provide curated Azure infra templates to your developers to *deploy* their code into
 
 ## Devcenter concepts
 
@@ -18,20 +18,21 @@ A typical Devcenter configuration depends on & integrates a lot of Azure Service
 ```mermaid
 erDiagram
 
-    DEVCENTER }|..|{ PROJECT : has
-    DEVCENTER }|..|{ AzureMonitor : "logs to"
+    Devcenter }|..|{ PROJECT : has
+    Devcenter }|..|{ AzureMonitor : "logs to"
     PROJECT }|..|{ Azure-AdRbac : "authorises developers with"
     
     %% Networking components
     VNET ||..|{ Devbox-Pool : hosts
     Net-Connection ||..|{ VNET : exposes
-    DEVCENTER ||..|| Net-Connection : "leverages for Devbox pool"
+    Devcenter ||..|| Net-Connection : "leverages for Devbox pool"
 
     %% Devbox components
     PROJECT }|..|{ Devbox-Pool : "provides dev vms from"
     Devbox-Pool ||--|| Schedule : "shutdown"
     Devbox-Pool }|..|{ Devbox-Definition : "gets compute/image spec"
     Image-Gallery }|..|{ Devbox-Definition : "provides images"
+    Devbox }|..|{ Devbox-Pool : "Provisions"
 
     %% Styling
     %%style DEVCENTER fill :#f9f
