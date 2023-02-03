@@ -7,6 +7,12 @@ This guide helps accelerate onboarding to the two Azure Services that Azure Devc
 
 ## Devcenter concepts
 
+### Projects
+
+Both Devbox and Deployment Environments use several common Devcenter components to drive their experiences. Central to these is the concept of `Projects`. A project is what binds the developer access to developer workstations through Devbox and the relevant templates from ADE.
+
+### Azure Services
+
 A typical Devcenter configuration depends on & integrates a lot of Azure Services. This can be a little confusing, but also takes time to correctly configure a working environment. The IaC in this repository provides the consistency of creation and configuration of all these components via 2-3 az cli commands.
 
 ```mermaid
@@ -40,8 +46,6 @@ Your Azure AD tenant must be enabled for [auto-enrolment](https://learn.microsof
 It doesn't work with invited (B2B) identities, so users will need to be directly associated with the tenant.
 
 ## Deploy the common infrastructure
-
-Both Devbox and Deployment Environments use several common Devcenter components to drive their experiences. Central to these is the concept of `Projects`. A project is what binds the developer access to developer workstations through Devbox and the relevant templates from ADE.
 
 ```bash
 az deployment group create -g innerloop -f bicep/common.bicep -p devboxProjectUser=$(az ad signed-in-user show --query id -o tsv)
