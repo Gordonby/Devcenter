@@ -74,6 +74,8 @@ Your Developers will access Devbox resources through a dedicated portal; [https:
 
 ## Azure Deployment Environments
 
+`ADE section status : wip`
+
 ### Catalog repo
 
 ADE requires a catalog in the form of a Git repository. The catalog contains IaC templates used to create environments.
@@ -90,5 +92,24 @@ gh repo fork Azure/deployment-environments
 Lets create the infrastructure components for ADE
 
 ```bash
- az deployment group create -g innerloop -f bicep/devbox.bicep -p devcenterName=dc-dbox
+PAT="paste-your-pat-token-here"
+az deployment group create -g innerloop -f bicep/ade.bicep -p devcenterName=dc-dbox
 ```
+
+### Assign Access
+
+The Devcenter uses a new managed identity to create Azure resources.
+For any subscriptions/resource groups that are to be used for ADE deployments RBAC assignments must be made.
+
+```bash
+CURRENTSUBID=$(az account show --query id -o tsv)
+DEPLOYSUBID=$CURRENTSUBID
+DEPLOYRG=deployrg
+
+#create rbac
+
+
+```
+
+### Deploy an environment
+

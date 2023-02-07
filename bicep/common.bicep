@@ -11,6 +11,9 @@ param devboxProjectAdmin string = ''
 resource dc 'Microsoft.DevCenter/devcenters@2022-11-11-preview' = {
   name: 'dc-${nameseed}'
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
 }
 
 resource project 'Microsoft.DevCenter/projects@2022-11-11-preview' = {
