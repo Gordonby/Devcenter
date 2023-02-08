@@ -51,15 +51,17 @@ To complete the steps in this guide, you will need the Azure CLI and the GitHub 
 ## Deploy the common infrastructure
 
 ```bash
-az deployment group create -g innerloop -f bicep/common.bicep -p devboxProjectUser=$(az ad signed-in-user show --query id -o tsv)
+RG=devcenter
+DEPLOYINGUSERID=$(az ad signed-in-user show --query id -o tsv)
+DCNAME=$(az deployment group create -g $RG -f bicep/common.bicep -p devboxProjectUser=$DEPLOYINGUSERID --query 'properties.outputs.devcenterName.value' -o tsv)
 ```
 
 ## Azure Devbox
 
-A fully working Devbox requires a lot of connected components. The bicep IaC included in this repository will help expedite the creation of a functioning Devbox.
+A fully working Devbox requires a lot of connected components. The bicep IaC included in this repository will help expedite the creation of a functioning Devbox environment.
 
 ```bash
- az deployment group create -g innerloop -f bicep/devbox.bicep -p devcenterName=dc-dbox
+ az deployment group create -g innerloop -f bicep/devbox.bicep -p devcenterName=$DCNAME
 ```
 
 ### Deployed Resources
@@ -93,7 +95,7 @@ Lets create the infrastructure components for ADE
 
 ```bash
 PAT="paste-your-pat-token-here"
-az deployment group create -g innerloop -f bicep/ade.bicep -p devcenterName=dc-dbox
+az deployment group create -g innerloop -f bicep/ade.bicep -p devcenterName=$DCNAME
 ```
 
 ### Assign Access
@@ -113,3 +115,8 @@ DEPLOYRG=deployrg
 
 ### Deploy an environment
 
+## Advanced Deployment Scenarios
+
+The IaC deployments above have used default parameter values to deploy a good sample configuration of Devbox and ADE. The IaC code is capable of deploying much more customised Devcenter environments as these samples show.
+
+`todo`

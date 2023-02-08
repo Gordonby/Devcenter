@@ -78,4 +78,4 @@ resource logs 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   }
 }
 
-output datacenterName string = dc.name
+output devcenterName string = dc.name
