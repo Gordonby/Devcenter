@@ -129,7 +129,7 @@ Working with the default Marketplace VM images for Devbox provides a low complex
 
 Maintaining custom images can be time consuming, which is where the Azure Image Builder service comes in. It can be leveraged to take default MarketPlace images and layer on customisation before distributing the image to a private compute gallery that integrates with Dev Box.
 
-> The best thing about Azure Image Builder is the ability to layer on top of the default images with your own config, without needing to login to a VM.
+> The best thing about Azure Image Builder is the ability to layer on top of the Marketplace images with your own config, without needing to login to a VM.
 
 ```mermaid
 erDiagram
