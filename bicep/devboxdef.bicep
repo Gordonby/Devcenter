@@ -3,6 +3,8 @@ param definitionName string = '${nameseed}-${image}-${storage}'
 param location string = resourceGroup().location
 param devcenterName string
 
+param galleryName string = 'Default'
+
 @allowed(['win11', 'vs2022win11m365'])
 param image string = 'win11'
 
@@ -24,7 +26,7 @@ resource dc 'Microsoft.DevCenter/devcenters@2022-11-11-preview' existing = {
 }
 
 resource gallery 'Microsoft.DevCenter/devcenters/galleries@2022-11-11-preview' existing = {
-  name: 'Default'
+  name: galleryName
   parent: dc
 }
 

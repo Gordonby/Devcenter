@@ -120,3 +120,51 @@ DEPLOYRG=deployrg
 The IaC deployments above have used default parameter values to deploy a good sample configuration of Devbox and ADE. The IaC code is capable of deploying much more customised Devcenter environments as these samples show.
 
 `todo`
+
+### Working with an existing subnet
+
+### Leveraging the Azure Image Builder
+
+Working with standard VM images for Devbox provides a low complexity jumpstart for your dev team. The next step in providing tailored images with all the right software for your project is to product custom images. Maintaining custom images can be time consuming, which is where the Azure Image Builder service comes in. It can be leveraged to take default MarketPlace images and layer on customisation before distributing the image to a private compute gallery that integrates with Dev Box.
+
+> The best thing about Azure Image Builder is the ability to layer on top of the default images with your own config, without needing to login to a VM.
+
+```mermaid
+erDiagram
+    Image-Gallery }|..|{ Devbox-Definition : "provides images"
+    Image-Gallery ||..|{ Custom-Image: ""
+    Image-Template ||..|{ Custom-Image: "distributes custom built image"
+    Marketplace-Image ||..|{ Image-Template: "base image provides"
+    Image-Template ||..|{ Scripts: "customises with"
+```
+
+To use IaC in creating the compute gallery and image build, run the following command;
+
+```bash
+az deployment group create -g devcenter -f .\bicep\aib.bicep -p devcenterName=$DCNAME
+```
+
+## Initiating the Image Build
+
+You can initiate the image build locally or in Azure using a DeploymentScript resource.
+
+As a deployment output, are the commands you could leverage if you prefer to initiate the image build locally.
+![image](https://user-images.githubusercontent.com/17914476/218498286-aa98a277-3788-46a5-aeb0-24f618e76b66.png)
+
+> Image Building takes time! You could find that 30-40 minutes later the build will be ready.
+
+### Debugging build failures
+
+A new resource group will be created during the Azure Image Build. It prefixes the name of the image template with `IT_`, and contains a storage account with a `customizations.log` file that you can check.
+
+Start searching for the `ERROR:` keyword to stop what the problem is.
+
+Common problems include
+
+- Choosing a VM SKU that's incompatible with the Generation of Image you're using. EG 'Standard_D2_v3' and Gen2.
+
+## What's next
+
+Summary | Link
+------- | ----
+Persona focussed lab, with Azure Portal screenshot walkthrough | [https://github.com/danielstocker/devboxlab](https://github.com/danielstocker/devboxlab)
