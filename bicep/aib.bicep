@@ -42,7 +42,6 @@ resource w365Rbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
-
 @description('These are marketplace images that are the base for custom images')
 var imageDefinitionMap = {
   vs2022win11m365: {

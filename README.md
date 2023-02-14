@@ -5,6 +5,8 @@ This guide helps accelerate onboarding to the two Azure Services that Azure Devc
 1. [Azure Devbox](https://learn.microsoft.com/azure/dev-box/overview-what-is-microsoft-dev-box) - Give your developers access to managed Windows Virtual Machines to code on
 1. [Azure Deployment Environments](https://azure.microsoft.com/products/deployment-environments) - Provide curated Azure infra templates to your developers to *deploy* their code into
 
+> Please note this repo is in active development, most scenarios are complete, but some have been flagged with `todo`
+
 ## Devcenter concepts
 
 ### Projects
@@ -61,7 +63,7 @@ DCNAME=$(az deployment group create -g $RG -f bicep/common.bicep -p devboxProjec
 A fully working Devbox requires a lot of connected components. The bicep IaC included in this repository will help expedite the creation of a functioning Devbox environment.
 
 ```bash
- az deployment group create -g innerloop -f bicep/devbox.bicep -p devcenterName=$DCNAME
+az deployment group create -g $RG -f bicep/devbox.bicep -p devcenterName=$DCNAME
 ```
 
 ### Deployed Resources
@@ -139,7 +141,7 @@ erDiagram
 To use IaC in creating the compute gallery and image build, run the following command;
 
 ```bash
-az deployment group create -g devcenter -f .\bicep\aib.bicep -p devcenterName=$DCNAME
+az deployment group create -g devcenter -f bicep/aib.bicep -p devcenterName=$DCNAME doBuildInAzureDeploymentScript=true
 ```
 
 #### Initiating the Image Build
@@ -152,6 +154,10 @@ As a deployment output, it provides the exact commands to initiate the image bui
 
 > Image Building takes time! You could find that 30-40 minutes later the build will be ready.
 
+#### Further image customisation
+
+`todo`
+
 #### Debugging build failures
 
 A new resource group will be created during the Azure Image Build. It prefixes the name of the image template with `IT_`, and contains a storage account with a `customizations.log` file that you can check.
@@ -162,6 +168,20 @@ Common problems include
 
 - Choosing a VM SKU that's incompatible with the Generation of Image you're using. EG 'Standard_D2_v3' and Gen2.
 
+### Enrolling other developers
+
+If you have a list of developers that you'd like to enrol, this script will expedite their access to create Dev Box.
+
+```bash
+DEVUSER=user@contoso.com
+DEVUSERID=$(az ad user show --id $DEVUSER --query id -o tsv)
+SUBID=$(az account show --query id -o tsv)
+PROJECTNAME=developers
+PROJECTID=/subscriptions/$SUBID/resourceGroups/$RG/providers/Microsoft.DevCenter/projects/$PROJECTNAME
+
+az role assignment create --assignee $DEVUSER --role "DevCenter Dev Box User" --scope $PROJECTID
+```
+
 ### Deploying into an existing subnet
 
 `todo`
@@ -171,3 +191,4 @@ Common problems include
 Summary | Link
 ------- | ----
 Persona focussed lab, with Azure Portal screenshot walkthrough | [https://github.com/danielstocker/devboxlab](https://github.com/danielstocker/devboxlab)
+Dev Box deployed using GitHub actions and bicep | [https://github.com/ljtill/bicep-devbox](https://github.com/ljtill/bicep-devbox)

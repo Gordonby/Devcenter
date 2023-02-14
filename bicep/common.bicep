@@ -34,6 +34,7 @@ resource projectUserRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
     principalId: devboxProjectUser
   }
 }
+output projectId string = project.id
 
 var devCenterDevBoxAdminRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '331c37c6-af14-46d9-b9f4-e1909e1b95a0')
 resource projectAdminRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = if(!empty(devboxProjectAdmin)) {
