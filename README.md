@@ -95,13 +95,13 @@ Lets create the infrastructure components for ADE
 
 ```bash
 PAT="paste-your-pat-token-here"
-az deployment group create -g innerloop -f bicep/ade.bicep -p devcenterName=$DCNAME
+az deployment group create -g $RG -f bicep/ade.bicep -p devcenterName=$DCNAME catalogRepoPat=$PAT
 ```
 
 ### Assign Access
 
 The Devcenter uses a new managed identity to create Azure resources.
-For any subscriptions/resource groups that are to be used for ADE deployments RBAC assignments must be made.
+For any subscriptions that are to be used for ADE deployments RBAC assignments must be made.
 
 ```bash
 CURRENTSUBID=$(az account show --query id -o tsv)
@@ -115,13 +115,9 @@ DEPLOYRG=deployrg
 
 ### Deploy an environment
 
-## Advanced Deployment Scenarios
+## Advanced Deployment Scenarios - Dev Box
 
 The IaC deployments above have used default parameter values to deploy a good sample configuration of Devbox and ADE. The IaC code is capable of deploying much more customised Devcenter environments as these samples show.
-
-### Deploying into an existing subnet
-
-`todo`
 
 ### Leveraging the Azure Image Builder
 
@@ -165,6 +161,10 @@ Start searching for the `ERROR:` keyword to stop what the problem is.
 Common problems include
 
 - Choosing a VM SKU that's incompatible with the Generation of Image you're using. EG 'Standard_D2_v3' and Gen2.
+
+### Deploying into an existing subnet
+
+`todo`
 
 ## What's next
 

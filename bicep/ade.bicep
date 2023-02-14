@@ -2,10 +2,13 @@ param nameseed string = 'dbox'
 param location string = resourceGroup().location
 param devcenterName string
 param environmentName string = 'sandbox'
+param projectTeamName string = 'developers'
 param catalogName string = 'dcc'
 param catalogRepoUri string = 'https://github.com/Gordonby/dev-center-catalog.git'
-param catalogRepoPat string = ''
-param projectTeamName string = 'developers'
+
+@secure()
+@description('A PAT token is required, even for public repos')
+param catalogRepoPat string
 
 resource dc 'Microsoft.DevCenter/devcenters@2022-11-11-preview' existing = {
   name: devcenterName
@@ -15,6 +18,7 @@ resource project 'Microsoft.DevCenter/projects@2022-11-11-preview' existing = {
   name: projectTeamName
 }
 
+@description('A keyvault is required to store your pat token for the Catalog')
 module kv 'keyvault.bicep' = {
   name: '${deployment().name}-keyvault'
   params: {
@@ -23,6 +27,7 @@ module kv 'keyvault.bicep' = {
   }
 }
 
+@description('Keyvault secrect holds pat token')
 module kvSecret 'keyvaultsecret.bicep' = if(!empty(catalogRepoPat)) {
   name: '${deployment().name}-keyvault-patSecret'
   params: {
