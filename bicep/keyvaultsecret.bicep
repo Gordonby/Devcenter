@@ -1,5 +1,7 @@
 param keyVaultName string
 param secretName string
+
+@secure()
 param secretValue string
 
 resource kv 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
