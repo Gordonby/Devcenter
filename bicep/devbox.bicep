@@ -38,12 +38,36 @@ module networking 'devboxNetworking.bicep' = {
   }
 }
 
-resource projectPool 'Microsoft.DevCenter/projects/pools@2022-11-11-preview' = {
+resource win11ProjectPool 'Microsoft.DevCenter/projects/pools@2022-11-11-preview' = {
   name: '${projectTeamName}-win11plain'
   location: location
   parent: project
   properties: {
     devBoxDefinitionName: win11plain.outputs.definitionName
+    licenseType: 'Windows_Client'
+    localAdministrator: 'Enabled'
+    networkConnectionName: networking.outputs.attachedNetworkName
+  }
+  
+  
+  resource scheduleStop 'schedules' = {
+    name: 'default' //Currently we only support one schedule for a pool and the schedule name can only be 'default'"
+    properties: {
+      frequency: 'Daily'
+      state: 'Enabled'
+      type: 'StopDevBox'
+      timeZone: 'America/Los_Angeles'
+      time: '18:00'
+    }
+  }
+}
+
+resource vsProjectPool 'Microsoft.DevCenter/projects/pools@2022-11-11-preview' = {
+  name: '${projectTeamName}-vs2022'
+  location: location
+  parent: project
+  properties: {
+    devBoxDefinitionName: vs2022.outputs.definitionName
     licenseType: 'Windows_Client'
     localAdministrator: 'Enabled'
     networkConnectionName: networking.outputs.attachedNetworkName
