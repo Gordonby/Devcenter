@@ -232,31 +232,7 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
       sku: imageDefinitionProperties.sku
       version: 'Latest'
     }
-    customize: imageCustomize  //[
-      // {
-      //   type: 'WindowsUpdate'
-      //   searchCriteria: 'IsInstalled=0'
-      //   filters: [
-      //     'exclude:$_.Title -like \'*Preview*\''
-      //     'include:$true'
-      //   ]
-      //   updateLimit: 40
-      // }
-      // {
-      //   type: 'PowerShell'
-      //   name: 'Install Choco and Vscode'
-      //   inline: [
-      //     'Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))'
-      //     'choco install -y vscode'
-      //   ]
-      // }
-      // {
-      //   type: 'PowerShell'
-      //   name: 'AzureWindowsBaseline'
-      //   runElevated: true
-      //   scriptUri: customizerScriptUri
-      // }
-    //]
+    customize: imageCustomize
     distribute: [
       {
         type: 'SharedImage'
