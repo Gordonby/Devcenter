@@ -61,25 +61,36 @@ var imageDefinitionMap = {
 @allowed(['vs2022win11m365', 'win11'])
 param imagebase string = 'vs2022win11m365'
 
+param imageSkuName string = '${imagebase}-${join(imageCustomisationOptions,'-')}'
+param imageSkuVersion string ='1-0-0'
+
 param imageDetails object = {
   name: '${imageName}_Definition'
   publisher: 'Contoso'
   offer: imagebase
-  sku: '${join(imageCustomisation,'-')}_1-0-0'
+  sku: '${imageSkuName}_${imageSkuVersion}'
 }
 
 var imageDefinitionProperties = imageDefinitionMap[imagebase]
 
 @allowed(['vscode', 'windowsUpdate'])
-param imageCustomisation array = ['vscode']
+@description('Standard customisation options')
+param imageCustomisationOptions array = []
+
+@description('PowerShell file locations that will be incuded in the customisation of the image')
+param imageCustomisationPs1URIs array = [
+  'https://raw.githubusercontent.com/Gordonby/Snippets/master/AzureImageBuilderCustomization/AzureDevBox/azureDeveloper.ps1'
+  'https://raw.githubusercontent.com/Gordonby/Snippets/master/AzureImageBuilderCustomization/AzureDevBox/cloudNative.ps1'
+  'https://raw.githubusercontent.com/Gordonby/Snippets/master/AzureImageBuilderCustomization/AzureDevBox/coreDev.ps1'
+]
 
 @description('Name of the custom iamge to create and distribute using Azure Image Builder.')
-param imageName string = take('${nameseed}-${imagebase}', 16)
+param imageName string = take('${nameseed}-${imageSkuName}', 16)
 var runOutputName  = '${imageName}_CustomImage'
 
-@description('Update/Upgrade of image templates is currently not supported - So for Idempotency reasons a GUID is being introduced into the naming')
-var imageTemplateName = '${imageName}_${newguid}_Template'
-var imageBuildName = '${imageName}_${newguid}_Build'
+@description('Update/Upgrade of image templates is currently not supported, therefore a GUID is being introduced into the naming to create uniqueness and a successful deployment/build')
+var imageTemplateName = take('${imageName}-${imageSkuVersion}_${newguid}_Template',64)
+var imageBuildName = take('${imageName}-${imageSkuVersion}_${newguid}_Build',64)
 
 @description('A unique string generated for each deployment, to make sure the script is always run.')
 param newguid string = newGuid()
@@ -88,6 +99,32 @@ resource templateIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022
   name: 'id-${nameseed}'
   location: location
 }
+
+var ps1Customisations =  [for ps1File in imageCustomisationPs1URIs: {
+  type: 'PowerShell'
+  name: last(split(ps1File,'/'))
+  scriptUri: ps1File
+}]
+
+var imageCustomize = union(ps1Customisations,
+  contains(imageCustomisationOptions, 'windowsUpdate') ? [{
+      type: 'WindowsUpdate'
+      searchCriteria: 'IsInstalled=0'
+      filters: [
+        'exclude:$_.Title -like \'*Preview*\''
+        'include:$true'
+      ]
+      updateLimit: 40
+    }] : [],
+    contains(imageCustomisationOptions, 'vscode') ? [{
+        type: 'PowerShell'
+        name: 'Install Choco and Vscode'
+        inline: [
+          'Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))'
+          'choco install -y vscode'
+        ]
+      }] : []   
+)
 
 var templateIdentityRoleDefinitionName = guid(resourceGroup().id)
 resource templateIdentityRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
@@ -195,7 +232,7 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
       sku: imageDefinitionProperties.sku
       version: 'Latest'
     }
-    customize: [
+    customize: imageCustomize  //[
       // {
       //   type: 'WindowsUpdate'
       //   searchCriteria: 'IsInstalled=0'
@@ -205,21 +242,21 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
       //   ]
       //   updateLimit: 40
       // }
-      {
-        type: 'PowerShell'
-        name: 'Install Choco and Vscode'
-        inline: [
-          'Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))'
-          'choco install -y vscode'
-        ]
-      }
+      // {
+      //   type: 'PowerShell'
+      //   name: 'Install Choco and Vscode'
+      //   inline: [
+      //     'Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))'
+      //     'choco install -y vscode'
+      //   ]
+      // }
       // {
       //   type: 'PowerShell'
       //   name: 'AzureWindowsBaseline'
       //   runElevated: true
       //   scriptUri: customizerScriptUri
       // }
-    ]
+    //]
     distribute: [
       {
         type: 'SharedImage'
