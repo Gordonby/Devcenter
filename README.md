@@ -83,7 +83,7 @@ Your Developers will access Devbox resources through a dedicated portal; [https:
 ### Catalog repo
 
 ADE requires a catalog in the form of a Git repository. The catalog contains IaC templates used to create environments.
-To quickly get started with a sample catalog, use these commands to fork the [ADE](https://github.com/Azure/deployment-environments) repo.
+To quickly get started with a sample catalog, use these commands to fork the [ADE](https://github.com/Azure/deployment-environments) repo using the GitHub CLI.
 
 ```bash
 gh repo fork Azure/deployment-environments
@@ -97,7 +97,8 @@ Lets create the infrastructure components for ADE
 
 ```bash
 PAT="paste-your-pat-token-here"
-az deployment group create -g $RG -f bicep/ade.bicep -p devcenterName=$DCNAME catalogRepoPat=$PAT
+REPO="https://github.com/your-organization-name/deployment-environments.git"
+az deployment group create -g $RG -f bicep/ade.bicep -p devcenterName=$DCNAME catalogRepoUri=$REPO catalogRepoPat=$PAT adeProjectUser=$DEPLOYINGUSERID
 ```
 
 ### Assign Access
@@ -112,10 +113,17 @@ DEPLOYRG=deployrg
 
 #create rbac
 
-
 ```
 
 ### Deploy an environment
+
+Visit the [Developer Portal](https://devportal.microsoft.com) to deploy an environment.
+
+![image](https://user-images.githubusercontent.com/17914476/222717202-70f93574-fb5b-4267-ad7d-36b1613b2841.png)
+
+![image](https://user-images.githubusercontent.com/17914476/222717510-b30747cd-e9f4-4ebc-b0e1-73066c249ae7.png)
+
+![image](https://user-images.githubusercontent.com/17914476/222717646-0792eb2b-42b7-478e-bb54-4df72dcfdd07.png)
 
 ## Advanced Deployment Scenarios - Dev Box
 
@@ -179,7 +187,12 @@ SUBID=$(az account show --query id -o tsv)
 PROJECTNAME=developers
 PROJECTID=/subscriptions/$SUBID/resourceGroups/$RG/providers/Microsoft.DevCenter/projects/$PROJECTNAME
 
+#Dev box
 az role assignment create --assignee $DEVUSER --role "DevCenter Dev Box User" --scope $PROJECTID
+
+#Deployment Environment
+az role assignment create --assignee $DEVUSER --role "Deployment Environments User" --scope $PROJECTID
+
 ```
 
 ### Deploying into an existing subnet
