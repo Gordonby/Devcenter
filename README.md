@@ -68,7 +68,7 @@ DEPLOYINGUSERID=$(az ad signed-in-user show --query id -o tsv)
 az group create -n $RG -l eastus
 
 #Create devcenter common components
-DCNAME=$(az deployment group create -g $RG -f bicep/common.bicep -p devboxProjectUser=$DEPLOYINGUSERID --query 'properties.outputs.devcenterName.value' -o tsv)
+DCNAME=$(az deployment group create -g $RG -f bicep/common.bicep -p nameseed=devbox devboxProjectUser=$DEPLOYINGUSERID --query 'properties.outputs.devcenterName.value' -o tsv)
 ```
 
 ![image](https://user-images.githubusercontent.com/17914476/223455708-9dccf8cf-b608-4f37-92aa-5ca6707c9f8a.png)
