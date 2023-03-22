@@ -165,7 +165,7 @@ erDiagram
 To use IaC in creating the compute gallery and image build, run the following command;
 
 ```bash
-az deployment group create -g $RG -f bicep/aib.bicep -p devcenterName=$DCNAME doBuildInAzureDeploymentScript=true
+az deployment group create -g $RG -f bicep/aib.bicep -p devcenterName=$DCNAME nameseed=devbox doBuildInAzureDeploymentScript=true
 ```
 
 #### Initiating the Image Build
