@@ -50,10 +50,18 @@ It doesn't work with invited (B2B) identities, so users will need to be directly
 
 To complete the steps in this guide, you will need the Azure CLI and the GitHub CLI.
 
+## Clone the repository
+
+```bash
+git clone https://github.com/Gordonby/Devcenter.git
+cd Devcenter
+```
+
 ## Deploy the common infrastructure
 
 ```bash
 RG=devcenter
+
 DEPLOYINGUSERID=$(az ad signed-in-user show --query id -o tsv)
 
 #Create resource group
