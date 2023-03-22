@@ -62,6 +62,7 @@ cd Devcenter
 ```bash
 RG=devcenter
 
+#Get the deploying users id for RBAC assignments
 DEPLOYINGUSERID=$(az ad signed-in-user show --query id -o tsv)
 
 #Create resource group
