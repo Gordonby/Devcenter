@@ -74,7 +74,7 @@ DCNAME=$(az deployment group create -g $RG -f bicep/common.bicep -p nameseed=dev
 
 ![image](https://user-images.githubusercontent.com/17914476/223455708-9dccf8cf-b608-4f37-92aa-5ca6707c9f8a.png)
 
-## Azure Devbox
+## Deploy Azure Devbox Infrastructure
 
 A fully working Devbox requires a lot of connected components. The bicep IaC included in this repository will help expedite the creation of a functioning Devbox environment.
 
@@ -86,7 +86,7 @@ az deployment group create -g $RG -f bicep/devbox.bicep -p devcenterName=$DCNAME
 
 ![azure resources](devboxResources.png)
 
-### Access the Devbox
+### Create a Dev Box
 
 Your Developers will access Devbox resources through a dedicated portal; [https://aka.ms/devbox-portal](https://devbox.microsoft.com/)
 
