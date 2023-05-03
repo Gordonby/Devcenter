@@ -2,7 +2,7 @@
 
 This guide helps accelerate onboarding to the two Azure Services that Azure Devcenter enables by providing Bicep Infrastructure as Code to quickly deploy and configure the services.
 
-1. [Azure Devbox](https://learn.microsoft.com/azure/dev-box/overview-what-is-microsoft-dev-box) - Give your developers access to managed Windows Virtual Machines to code on
+1. [Microsoft Dev Box](https://learn.microsoft.com/azure/dev-box/overview-what-is-microsoft-dev-box) - Give your developers access to managed Windows Virtual Machines to code on
 1. [Azure Deployment Environments](https://azure.microsoft.com/products/deployment-environments) - Provide curated Azure infra templates to your developers to *deploy* their code into
 
 > Please note this repo is in active development, most scenarios are complete, but some have been flagged with `todo`
@@ -11,7 +11,7 @@ This guide helps accelerate onboarding to the two Azure Services that Azure Devc
 
 ### Projects
 
-Both Devbox and Deployment Environments use several common Devcenter components to drive their experiences. Central to these is the concept of `Projects`. A project is what binds the developer access to developer workstations through Devbox and the relevant templates from ADE.
+Both Dev Box and Deployment Environments use several common Devcenter components to drive their experiences. Central to these is the concept of `Projects`. A project is what binds the developer access to developer workstations through Dev Box and the relevant templates from ADE.
 
 ### Azure Services
 
@@ -27,7 +27,7 @@ erDiagram
     %% Networking components
     VNET ||..|{ Devbox-Pool : hosts
     Net-Connection ||..|{ VNET : exposes
-    Devcenter ||..|| Net-Connection : "leverages for Devbox pool"
+    Devcenter ||..|| Net-Connection : "leverages for Dev Box pool"
 
     %% Devbox components
     PROJECT }|..|{ Devbox-Pool : "provides dev vms from"
@@ -42,7 +42,7 @@ erDiagram
 
 ## Prerequisites
 
-Devbox has several license [prerequisites](https://learn.microsoft.com/azure/dev-box/quickstart-configure-dev-box-service?tabs=AzureADJoin#prerequisites). Namely Windows, Intune and AzureAD.
+Microsoft Dev Box has several license [prerequisites](https://learn.microsoft.com/azure/dev-box/quickstart-configure-dev-box-service?tabs=AzureADJoin#prerequisites). Namely Windows, Intune and AzureAD.
 
 Your Azure AD tenant must be enabled for [auto-enrolment](https://learn.microsoft.com/mem/intune/enrollment/quickstart-setup-auto-enrollment) of new devices (intune).
 
@@ -74,9 +74,9 @@ DCNAME=$(az deployment group create -g $RG -f bicep/common.bicep -p nameseed=dev
 
 ![image](https://user-images.githubusercontent.com/17914476/223455708-9dccf8cf-b608-4f37-92aa-5ca6707c9f8a.png)
 
-## Deploy Azure Devbox Infrastructure
+## Deploy Microsoft Dev Box Infrastructure
 
-A fully working Devbox requires a lot of connected components. The bicep IaC included in this repository will help expedite the creation of a functioning Devbox environment.
+A fully working Dev Box requires a lot of connected components. The bicep IaC included in this repository will help expedite the creation of a functioning Dev Box environment.
 
 ```bash
 az deployment group create -g $RG -f bicep/devbox.bicep -p devcenterName=$DCNAME
@@ -88,9 +88,9 @@ az deployment group create -g $RG -f bicep/devbox.bicep -p devcenterName=$DCNAME
 
 ### Create a Dev Box
 
-Your Developers will access Devbox resources through a dedicated portal; [https://aka.ms/devbox-portal](https://devbox.microsoft.com/)
+Your Developers will access Dev Box resources through a dedicated portal; [https://aka.ms/devbox-portal](https://devbox.microsoft.com/)
 
-![devbox portal](devboxPortal.png)
+![Microsoft Dev Box portal](devboxPortal.png)
 
 ## Azure Deployment Environments
 
@@ -143,11 +143,11 @@ Visit the [Developer Portal](https://devportal.microsoft.com) to deploy an envir
 
 ## Advanced Deployment Scenarios - Dev Box
 
-The IaC deployments above have used default parameter values to deploy a good sample configuration of Devbox and ADE. The IaC code is capable of deploying much more customised Devcenter environments as these samples show.
+The IaC deployments above have used default parameter values to deploy a good sample configuration of Microsoft Dev Box and ADE. The IaC code is capable of deploying much more customised Devcenter environments as these samples show.
 
 ### Leveraging the Azure Image Builder
 
-Working with the default Marketplace VM images for Devbox provides a low complexity jumpstart for your dev team. The next step in providing tailored images with all the right software for your project is to produce custom images that contain all the tools and software needed.
+Working with the default Marketplace VM images for Dev Box provides a low complexity jumpstart for your dev team. The next step in providing tailored images with all the right software for your project is to produce custom images that contain all the tools and software needed.
 
 Maintaining custom images can be time consuming, which is where the Azure Image Builder service comes in. It can be leveraged to take default MarketPlace images and layer on customisation before distributing the image to a private compute gallery that integrates with Dev Box.
 
