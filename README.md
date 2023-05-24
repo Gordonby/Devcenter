@@ -1,5 +1,11 @@
 # Azure Devcenter Quickstart
 
+> This repository has moved to Azure-Samples : https://github.com/Azure-Samples/Devcenter
+
+---
+
+> The following content is kept for legacy reasons, please use the [new repository](https://github.com/Azure-Samples/Devcenter)
+
 This guide helps accelerate onboarding to the two Azure Services that Azure Devcenter enables by providing Bicep Infrastructure as Code to quickly deploy and configure the services.
 
 1. [Microsoft Dev Box](https://learn.microsoft.com/azure/dev-box/overview-what-is-microsoft-dev-box) - Give your developers access to managed Windows Virtual Machines to code on
